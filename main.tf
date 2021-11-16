@@ -16,15 +16,14 @@ terraform {
   }
 }
 
-# TODO FIXME
 terraform {
   backend "local" {
-    path = "/Users/atanaspam/Documents/Projects/homelab-terraform/terraform.tfstate"
+    path = "terraform.tfstate"
   }
 }
 
 provider "vsphere" {
-  #vsphere_server = "10.1.1.109"
+  # vsphere configuration is provided via environment variables
 
   # If you have a self-signed cert on vsphere
   allow_unverified_ssl = true

@@ -21,10 +21,3 @@ resource "random_password" "second_token_substr" {
   special = false
   upper   = false
 }
-
-# resource "null_resource" "discovery_token_ca_cert_hash" {
-#     provisioner "local-exec" {
-#         command = "openssl x509 -in test.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256"
-#     }
-# }
-
