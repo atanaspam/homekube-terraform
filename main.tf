@@ -9,10 +9,6 @@ terraform {
       source  = "registry.terraform.io/hashicorp/vsphere"
       version = ">=1.24.3"
     }
-    null = {
-      source  = "hashicorp/null"
-      version = "3.1.0"
-    }
   }
 }
 
