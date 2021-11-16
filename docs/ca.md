@@ -153,3 +153,21 @@ cfssl genkey -initca etcd-ca-csr.json | cfssljson -bare etcd-ca
 cfssl sign -ca $HOME/root-ca/ca.pem -ca-key $HOME/root-ca/ca-key.pem -config $HOME/root-ca/root-ca-config.json -profile intermediate etcd-ca.csr | cfssljson -bare etcd-ca
 cd ..
 ```
+
+## Generate the Kubernetes Discovery token ca cert hash
+
+The Kubernetes discovery token ca cert hash is used to securely join new nodes to your cluster. It does not change unless you regenrate your CA. You provide it manually to terraform each time you run it or you can export it as an environment variable.
+
+Export as env variable:
+
+```bash
+cd ca
+export TF_VAR_discovery_token_ca_cert_hash=$(openssl x509 -in kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256)
+```
+
+Simply print:
+
+```bash
+cd ca
+openssl x509 -in kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256
+```
