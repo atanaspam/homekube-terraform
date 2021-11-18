@@ -47,6 +47,10 @@ VSPHERE_PASSWORD
 VSPHERE_SERVER
 TF_VAR_ssh_username
 TF_VAR_ssh_password
+TF_VAR_datacenter_name
+TF_VAR_datastore_name
+TF_VAR_cluster_name
+TF_VAR_network_name
 ```
 
 ```bash

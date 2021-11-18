@@ -1,19 +1,19 @@
 data "vsphere_datacenter" "dc" {
-  name = ""
+  name = var.datacenter_name
 }
 
 data "vsphere_datastore" "vmstore" {
-  name          = "VM DataStore"
+  name          = var.datastore_name
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "Main Cluster"
+  name          = var.cluster_name
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_network" "vmnetwork" {
-  name          = "VM Network"
+  name          = var.network_name
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -88,8 +88,8 @@ resource "vsphere_virtual_machine" "kube_controller_0" {
     connection {
       host     = "10.1.4.0"
       type     = "ssh"
-      user     = var.ssh_username
-      password = var.ssh_password
+      user     = var.vm_ssh_username
+      password = var.vm_ssh_password
     }
   }
 }

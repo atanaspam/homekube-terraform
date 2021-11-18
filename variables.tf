@@ -1,8 +1,28 @@
-variable "ssh_username" {
+variable "datacenter_name" {
+  type = string
+  description = "The name of the vSphere datacenter where kubernetes will be deployed."
+}
+
+variable "datastore_name" {
+  type = string
+  description = "The name of the vSphere datastore that will be used for the kubernetes VMs."
+}
+
+variable "cluster_name" {
+  type = string
+  description = "The name of the vSphere cluster where kubernetes VMs will be deployed."
+}
+
+variable "network_name" {
+  type = string
+  description = "The name of the vSphere network that will be used by the kubernetes VMs."
+}
+
+variable "vm_ssh_username" {
   type = string
 }
 
-variable "ssh_password" {
+variable "vm_ssh_password" {
   type      = string
   sensitive = true
 }
