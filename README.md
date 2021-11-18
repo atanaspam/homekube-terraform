@@ -8,7 +8,7 @@ Usually spinning up a kubernetes cluster within a non-enterprise "on premises" e
 
 ## How it works
 
-
+TODO
 
 ## Prerequisites
 
@@ -51,6 +51,8 @@ TF_VAR_datacenter_name
 TF_VAR_datastore_name
 TF_VAR_cluster_name
 TF_VAR_network_name
+TF_VAR_num_controllers
+TF_VAR_num_workers
 ```
 
 ```bash

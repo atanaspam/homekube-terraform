@@ -1,16 +1,6 @@
-variable "num_controllers" {
+variable "node_num" {
   type        = number
-  description = "Number of Controller nodes in your cluster"
-
-  validation {
-    condition     = var.num_controllers % 2 != 0
-    error_message = "It is strongly recommended to run an odd number of controllers."
-  }
-}
-
-variable "num_workers" {
-  type        = number
-  description = "Number of Worker nodes in your cluster"
+  description = "The unique number of this node."
 }
 
 variable "datacenter_name" {
@@ -50,4 +40,9 @@ variable "bring_your_own_ca" {
 variable "discovery_token_ca_cert_hash" {
   type        = string
   description = "The cert hash used in the node join process. Value is ignored if bring_your_own_ca is false. Can be generated if you are using your own CA."
+}
+
+variable "kubeadm_join_token" {
+  type        = string
+  description = "The token used in the node join process"
 }
