@@ -5,6 +5,7 @@ locals {
   kubernetes_front_proxy_ca_key = fileexists("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") ? file("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") : ""
   etcd_ca                       = fileexists("${path.root}/ca/etcd-ca/etcd-ca.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca.pem") : ""
   etcd_ca_key                   = fileexists("${path.root}/ca/etcd-ca/etcd-ca-key.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca-key.pem") : ""
+  hostname                      = "kube-controller-${var.node_num}"
 }
 
 data "vsphere_datacenter" "dc" {
@@ -35,7 +36,7 @@ data "template_file" "kube_controller_metadata" {
   template = file("${path.root}/cloudinit/metadata.yaml")
   vars = {
     ip       = "10.1.4.0" # Already specified in the PfSense DHCP server
-    hostname = "kube-controller-${var.node_num}"
+    hostname = local.hostname
   }
 }
 
@@ -90,16 +91,16 @@ resource "vsphere_virtual_machine" "kube_controller" {
     "guestinfo.userdata.encoding" = "base64"
   }
 
-  # Will try to make this dynamic and only used for the first controller node. For now lets stop it.
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "cloud-init status --wait",
-  #   ]
-  #   connection {
-  #     host     = "10.1.4.0"
-  #     type     = "ssh"
-  #     user     = var.vm_ssh_username
-  #     password = var.vm_ssh_password
-  #   }
-  # }
+  Will try to make this dynamic and only used for the first controller node. For now lets stop it.
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait",
+    ]
+    connection {
+      host     = "10.1.4.0"
+      type     = "ssh"
+      user     = var.vm_ssh_username
+      password = var.vm_ssh_password
+    }
+  }
 }

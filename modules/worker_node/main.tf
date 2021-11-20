@@ -1,3 +1,13 @@
+locals {
+  kubernetes_ca                 = fileexists("${path.root}/ca/kubernetes-ca/kubernetes-ca.pem") ? file("${path.root}/ca/kubernetes-ca/kubernetes-ca.pem") : ""
+  kubernetes_ca_key             = fileexists("${path.root}/ca/kubernetes-ca/kubernetes-ca-key.pem") ? file("${path.root}/ca/kubernetes-ca/kubernetes-ca-key.pem") : ""
+  kubernetes_front_proxy_ca     = fileexists("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem") ? file("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem") : ""
+  kubernetes_front_proxy_ca_key = fileexists("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") ? file("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") : ""
+  etcd_ca                       = fileexists("${path.root}/ca/etcd-ca/etcd-ca.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca.pem") : ""
+  etcd_ca_key                   = fileexists("${path.root}/ca/etcd-ca/etcd-ca-key.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca-key.pem") : ""
+  hostname                      = "kube-worker-${var.node_num}"
+}
+
 data "vsphere_datacenter" "dc" {
   name = var.datacenter_name
 }
@@ -22,18 +32,18 @@ data "vsphere_virtual_machine" "templatevm" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data "template_file" "kube_worker_0_metadata" {
-  template = file("${path.module}/cloudinit/metadata.yaml")
+data "template_file" "node_metadata" {
+  template = file("${path.root}/cloudinit/metadata.yaml")
   vars = {
     ip       = "10.1.4.100" # Already specified in the PfSense DHCP server
-    hostname = "kube-worker-0"
+    hostname = local.hostname
   }
 }
 
-data "template_file" "kube_worker_0_userdata" {
-  template = file("${path.module}/cloudinit/userdata-worker.yaml")
+data "template_file" "kube_worker_userdata" {
+  template = file("${path.root}/cloudinit/userdata-worker.yaml")
   vars = {
-    token                         = local.kubeadm_token
+    token                         = var.kubeadm_join_token
     byoca                         = var.bring_your_own_ca
     kubernetes_ca                 = indent(6, local.kubernetes_ca)
     kubernetes_ca_key             = indent(6, local.kubernetes_ca_key)
@@ -41,12 +51,11 @@ data "template_file" "kube_worker_0_userdata" {
     kubernetes_front_proxy_ca_key = indent(6, local.kubernetes_front_proxy_ca_key)
     etcd_ca                       = indent(6, local.etcd_ca)
     etcd_ca_key                   = indent(6, local.etcd_ca_key)
-    discovery_token_ca_cert_hash  = var.discovery_token_ca_cert_hash
   }
 }
 
-resource "vsphere_virtual_machine" "kube_worker_0" {
-  name             = "Kubernetes Worker 0"
+resource "vsphere_virtual_machine" "kube_worker" {
+  name             = "Kubernetes Worker ${var.node_num}"
   datastore_id     = data.vsphere_datastore.vmstore.id
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
 
@@ -76,13 +85,9 @@ resource "vsphere_virtual_machine" "kube_worker_0" {
   }
 
   extra_config = {
-    "guestinfo.metadata"          = base64encode(data.template_file.kube_worker_0_metadata.rendered)
+    "guestinfo.metadata"          = base64encode(data.template_file.node_metadata.rendered)
     "guestinfo.metadata.encoding" = "base64"
-    "guestinfo.userdata"          = base64encode(data.template_file.kube_worker_0_userdata.rendered)
+    "guestinfo.userdata"          = base64encode(data.template_file.kube_worker_userdata.rendered)
     "guestinfo.userdata.encoding" = "base64"
   }
-
-  depends_on = [
-    module.controller_nodes
-  ]
 }

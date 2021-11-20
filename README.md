@@ -45,14 +45,15 @@ Env vars required
 VSPHERE_USER
 VSPHERE_PASSWORD
 VSPHERE_SERVER
-TF_VAR_ssh_username
-TF_VAR_ssh_password
+TF_VAR_vm_ssh_username
+TF_VAR_vm_ssh_password
 TF_VAR_datacenter_name
 TF_VAR_datastore_name
 TF_VAR_cluster_name
 TF_VAR_network_name
 TF_VAR_num_controllers
 TF_VAR_num_workers
+TF_VAR_discovery_token_ca_cert_hash=$(openssl x509 -in ca/kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256)
 ```
 
 ```bash
