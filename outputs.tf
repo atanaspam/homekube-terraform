@@ -4,11 +4,11 @@ output "kubeadm_join_token" {
 }
 
 output "workers" {
-  value     = module.worker_nodes
+  value = module.worker_nodes
 }
 
 output "controllers" {
-  value     = module.controller_nodes
+  value = module.controller_nodes
 }
 
 output "nodes" {

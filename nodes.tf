@@ -1,5 +1,5 @@
 module "controller_nodes" {
-  source = "./modules/controller_node"
+  source   = "./modules/controller_node"
   for_each = var.controller_static_ip_mappings
 
   node_num                     = each.key
@@ -16,7 +16,7 @@ module "controller_nodes" {
 }
 
 module "worker_nodes" {
-  source = "./modules/worker_node"
+  source   = "./modules/worker_node"
   for_each = var.worker_static_ip_mappings
 
   node_num                     = each.key
