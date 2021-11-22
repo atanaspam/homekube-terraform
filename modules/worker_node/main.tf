@@ -69,13 +69,13 @@ resource "vsphere_virtual_machine" "kube_worker" {
     network_id     = data.vsphere_network.vmnetwork.id
     adapter_type   = data.vsphere_virtual_machine.templatevm.network_interface_types[0]
     use_static_mac = "true"
-    mac_address    = "00:50:56:80:f3:2d" # Maps to the MAC specified in the PfSense DHCP Server
+    mac_address    = var.mac_address # Maps to the MAC specified in the PfSense DHCP Server
   }
-  wait_for_guest_net_timeout = 0
+  wait_for_guest_net_timeout = 3
 
   disk {
     label = "disk0"
-    size  = data.vsphere_virtual_machine.templatevm.disks.0.size
+    size  = 16 #data.vsphere_virtual_machine.templatevm.disks.0.size
     # eagerly_scrub    = data.vsphere_virtual_machine.templatevm.disks.0.eagerly_scrub
     # thin_provisioned = data.vsphere_virtual_machine.templatevm.disks.0.thin_provisioned
   }

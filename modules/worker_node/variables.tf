@@ -3,6 +3,11 @@ variable "node_num" {
   description = "The unique number of this node."
 }
 
+variable "mac_address" {
+  type        = string
+  description = "The MAC addrress to be used for this node's network interface."
+}
+
 variable "datacenter_name" {
   type        = string
   description = "The name of the vSphere datacenter where kubernetes will be deployed."

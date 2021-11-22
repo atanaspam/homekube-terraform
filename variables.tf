@@ -51,3 +51,23 @@ variable "discovery_token_ca_cert_hash" {
   type        = string
   description = "The cert hash used in the node join process. Value is ignored if bring_your_own_ca is false. Can be generated if you are using your own CA."
 }
+
+variable "controller_static_ip_mappings" {
+  type = map
+  description = "Static IP mappings for each node in the cluster. This is configurable so that you can have full control over the network setup of your nodes. The info here should match the static mappings in your DHCP server."
+  default = {
+    0 = {"mac" = "00:50:56:80:f3:20", "ip" = "10.1.4.0"},
+    # 1 = {"mac" = "00:50:56:80:f3:21", "ip" = "10.1.4.1"},
+    # 2 = {"mac" = "00:50:56:80:f3:22", "ip" = "10.1.4.2"},
+  }
+}
+
+variable "worker_static_ip_mappings" {
+  type = map
+  description = "Static IP mappings for each node in the cluster. This is configurable so that you can have full control over the network setup of your nodes. The info here should match the static mappings in your DHCP server."
+  default = {
+    0 = {"mac" = "00:50:56:80:f3:2d", "ip" = "10.1.4.100"},
+    # 1 = {"mac" = "00:50:56:80:f3:2c", "ip" = "10.1.4.101"},
+    # 2 = {"mac" = "00:50:56:80:f3:2b", "ip" = "10.1.4.102"},
+  }
+}

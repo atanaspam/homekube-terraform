@@ -69,9 +69,9 @@ resource "vsphere_virtual_machine" "kube_controller" {
     network_id     = data.vsphere_network.vmnetwork.id
     adapter_type   = data.vsphere_virtual_machine.templatevm.network_interface_types[0]
     use_static_mac = "true"
-    mac_address    = "00:50:56:80:f3:20" # Maps to the MAC specified in the PfSense DHCP Server
+    mac_address    = var.mac_address # Maps to the MAC specified in the PfSense DHCP Server
   }
-  wait_for_guest_net_timeout = 0
+  wait_for_guest_net_timeout = 3
 
   disk {
     label = "disk0"
@@ -91,16 +91,16 @@ resource "vsphere_virtual_machine" "kube_controller" {
     "guestinfo.userdata.encoding" = "base64"
   }
 
-  # Will try to make this dynamic and only used for the first controller node. For now lets stop it.
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "cloud-init status --wait",
-  #   ]
-  #   connection {
-  #     host     = "10.1.4.0"
-  #     type     = "ssh"
-  #     user     = var.vm_ssh_username
-  #     password = var.vm_ssh_password
-  #   }
-  # }
+  #Will try to make this dynamic and only used for the first controller node. For now lets stop it.
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait",
+    ]
+    connection {
+      host     = self.default_ip_address
+      type     = "ssh"
+      user     = var.vm_ssh_username
+      password = var.vm_ssh_password
+    }
+  }
 }
