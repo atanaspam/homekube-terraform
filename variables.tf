@@ -1,18 +1,3 @@
-variable "num_controllers" {
-  type        = number
-  description = "Number of Controller nodes in your cluster"
-
-  validation {
-    condition     = var.num_controllers % 2 != 0
-    error_message = "It is strongly recommended to run an odd number of controllers."
-  }
-}
-
-variable "num_workers" {
-  type        = number
-  description = "Number of Worker nodes in your cluster"
-}
-
 variable "datacenter_name" {
   type        = string
   description = "The name of the vSphere datacenter where kubernetes will be deployed."
@@ -56,9 +41,9 @@ variable "controller_static_ip_mappings" {
   type = map
   description = "Static IP mappings for each node in the cluster. This is configurable so that you can have full control over the network setup of your nodes. The info here should match the static mappings in your DHCP server."
   default = {
-    0 = {"mac" = "00:50:56:80:f3:20", "ip" = "10.1.4.0"},
-    # 1 = {"mac" = "00:50:56:80:f3:21", "ip" = "10.1.4.1"},
-    # 2 = {"mac" = "00:50:56:80:f3:22", "ip" = "10.1.4.2"},
+    0 = {"mac" = "00:50:56:80:f3:20"},
+    # 1 = {"mac" = "00:50:56:80:f3:21"},
+    # 2 = {"mac" = "00:50:56:80:f3:22"},
   }
 }
 
@@ -66,8 +51,8 @@ variable "worker_static_ip_mappings" {
   type = map
   description = "Static IP mappings for each node in the cluster. This is configurable so that you can have full control over the network setup of your nodes. The info here should match the static mappings in your DHCP server."
   default = {
-    0 = {"mac" = "00:50:56:80:f3:2d", "ip" = "10.1.4.100"},
-    # 1 = {"mac" = "00:50:56:80:f3:2c", "ip" = "10.1.4.101"},
-    # 2 = {"mac" = "00:50:56:80:f3:2b", "ip" = "10.1.4.102"},
+    0 = {"mac" = "00:50:56:80:f3:2d"},
+    # 1 = {"mac" = "00:50:56:80:f3:2c"},
+    # 2 = {"mac" = "00:50:56:80:f3:2b"},
   }
 }
