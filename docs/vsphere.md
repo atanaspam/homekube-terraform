@@ -20,10 +20,17 @@ Since have a vCenter Server Appliance deployed within my homelab I used the UI t
 
 1. Navigate to `Administration`
 2. Click on `Access Control` and `Roles`
-3. Clock on the `VMOperator Controller Manager` role and then on `Clone role action`
+3. Click on the `VMOperator Controller Manager` role and then on `Clone role action`
 4. Set `Role name` to a name of your choice for ex: `terraform` and submit
 5. Find and edit the newly created `terraform` role
-6. In the `Edit role` screen find the `Host` category and check `Delete virtual machine`, `Reconfigure virtual machine` and `Create virtual machine`
+6. Navigate to the `Edit role` screen.
+   1. Find the `Host` category and check:
+   `Delete virtual machine`,
+   `Reconfigure virtual machine`
+   `Create virtual machine`
+   2. Find the `vCenter Server Profiles` category and check:
+   `vCenter Server Profiles Read Privileges`
+   `vCenter Server Profiles Write Privileges`
 7. Click `next` and `finish` to save the changes
 
 ### Assign a role to the `terraform` user
@@ -33,3 +40,5 @@ Since have a vCenter Server Appliance deployed within my homelab I used the UI t
 3. Click on the `+` sign
 4. Set `Domain` to your domain, `User/Group` to `terraform` and the role to `terraform`
 5. Make sure `Propagate to children` is checked
+
+Alternatively if you are feeling brave or your terraform user will be doing extra work you can opt out of the least privilige setup, and you can just assign the `Administrator` role to your `terraform` user.
