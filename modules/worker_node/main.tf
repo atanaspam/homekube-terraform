@@ -35,8 +35,8 @@ data "vsphere_virtual_machine" "templatevm" {
 data "template_file" "node_metadata" {
   template = file("${path.root}/cloudinit/metadata.yaml")
   vars = {
-    ip       = "10.1.4.100" # Already specified in the PfSense DHCP server
     hostname = local.hostname
+    instance_id = "i-${md5(local.hostname)}"
   }
 }
 

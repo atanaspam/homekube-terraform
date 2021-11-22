@@ -1,13 +1,8 @@
-local-hostname: ${hostname}
-instance-id: ${hostname}
+local_hostname: ${hostname}
+instance_id: ${instance_id}
+public_ssh_keys:
 network:
   version: 2
   ethernets:
     ens160:
-      dhcp4: false #true to use dhcp
-      addresses:
-        - ${ip}/8
-      gateway4: 10.0.0.1 # Set gw here 
-      nameservers:
-        addresses:
-          - 10.0.0.1 # Set DNS ip address here
+      dhcp4: true

@@ -35,8 +35,8 @@ data "vsphere_virtual_machine" "templatevm" {
 data "template_file" "kube_controller_metadata" {
   template = file("${path.root}/cloudinit/metadata.yaml")
   vars = {
-    ip       = "10.1.4.0" # Already specified in the PfSense DHCP server
     hostname = local.hostname
+    instance_id = "i-${md5(local.hostname)}"
   }
 }
 
@@ -91,16 +91,16 @@ resource "vsphere_virtual_machine" "kube_controller" {
     "guestinfo.userdata.encoding" = "base64"
   }
 
-  Will try to make this dynamic and only used for the first controller node. For now lets stop it.
-  provisioner "remote-exec" {
-    inline = [
-      "cloud-init status --wait",
-    ]
-    connection {
-      host     = "10.1.4.0"
-      type     = "ssh"
-      user     = var.vm_ssh_username
-      password = var.vm_ssh_password
-    }
-  }
+  # Will try to make this dynamic and only used for the first controller node. For now lets stop it.
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "cloud-init status --wait",
+  #   ]
+  #   connection {
+  #     host     = "10.1.4.0"
+  #     type     = "ssh"
+  #     user     = var.vm_ssh_username
+  #     password = var.vm_ssh_password
+  #   }
+  # }
 }
