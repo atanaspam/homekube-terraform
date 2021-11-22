@@ -3,24 +3,17 @@ output "kubeadm_join_token" {
   sensitive = true
 }
 
-# output "workers" {
-#   value     = module.worker_node
-#   sensitive = true
-# }
+output "workers" {
+  value     = module.worker_nodes
+}
 
-# output "controllers" {
-#   value     = module.controller_node
-#   sensitive = true
-# }
+output "controllers" {
+  value     = module.controller_nodes
+}
 
-# output "nodes" {
-#   value = [
-#     for node in append(
-#       [for node in module.controller_node : node.details]) : {
-#       name     = subscription.subscription_name,
-#       id       = subscription.subscription_id,
-#       env      = subscription.environment,
-#       ip_range = subscription.ip_range,
-#     }
-#   ]
-# }
+output "nodes" {
+  value = concat(
+    [for node in module.worker_nodes : node],
+    [for node in module.controller_nodes : node],
+  )
+}
