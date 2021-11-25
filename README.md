@@ -42,18 +42,18 @@ After all the prerequisites have been configured, all you need to do is run Terr
 Env vars required
 
 ```bash
-VSPHERE_USER
-VSPHERE_PASSWORD
-VSPHERE_SERVER
-TF_VAR_vm_ssh_username
-TF_VAR_vm_ssh_password
-TF_VAR_datacenter_name
-TF_VAR_datastore_name
-TF_VAR_cluster_name
-TF_VAR_network_name
-TF_VAR_num_controllers
-TF_VAR_num_workers
-TF_VAR_discovery_token_ca_cert_hash=$(openssl x509 -in ca/kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256)
+export VSPHERE_USER="terraform"
+export VSPHERE_PASSWORD
+export VSPHERE_SERVER
+export TF_VAR_vm_ssh_username
+export TF_VAR_vm_ssh_password
+export TF_VAR_datacenter_name
+export TF_VAR_datastore_name
+export TF_VAR_cluster_name
+export TF_VAR_network_name
+export TF_VAR_num_controllers
+export TF_VAR_num_workers
+export TF_VAR_discovery_token_ca_cert_hash=$(openssl x509 -in ca/kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256)
 ```
 
 ```bash

@@ -90,17 +90,26 @@ resource "vsphere_virtual_machine" "kube_controller" {
     "guestinfo.userdata"          = base64encode(data.template_file.kube_controller_userdata.rendered)
     "guestinfo.userdata.encoding" = "base64"
   }
+}
 
-  #Will try to make this dynamic and only used for the first controller node. For now lets stop it.
-  provisioner "remote-exec" {
-    inline = [
-      "cloud-init status --wait",
-    ]
-    connection {
+resource "null_resource" "first_controller_wait" {
+  # Only wait for the first controller to be ready
+  count = var.node_num == 0 ? 1 : 0
+
+  triggers {
+    node_num = "${var.node_num}"
+  }
+
+  connection {
       host     = self.default_ip_address
       type     = "ssh"
       user     = var.vm_ssh_username
       password = var.vm_ssh_password
     }
+
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait",
+    ]
   }
 }
