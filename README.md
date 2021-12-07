@@ -35,6 +35,10 @@ Instructions for creating your reusable image can be found [here](docs/vm-templa
 
 TODO
 
+### VM Image template
+
+Packer documentation goes here
+
 ## Running locally
 
 After all the prerequisites have been configured, all you need to do is run Terraform with the correct parameters.
