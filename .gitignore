@@ -28,3 +28,7 @@
 # My generated CAs
 ca/**
 !ca/README.md
+
+# Packer
+variables.pkrvars.hcl
+packer/output**
