@@ -11,22 +11,28 @@ autoinstall:
       uri: http://ports.ubuntu.com/ubuntu-ports
   early-commands:
     - sudo systemctl stop ssh
+  # I think this is not needed anymore
   # users:
   # - default
   # - name: "${username}"
   #   lock_passwd: false
   #   passwd: "${password}"
   identity:
-    hostname: ubuntu2104
+    hostname: ubuntu_base2104
     username: "${username}"
     password: "${password}"
   ssh:
     allow-pw: true
     install-server: true
+  # TODO automatically install a public key
+  # ssh_authorized_keys:
+  #    - $ {pub_key}
   packages:
     - openssh-server
     - open-vm-tools
     - cloud-init
+  package_update: true
+  package_upgrade: true
   user-data:
     disable_root: false
   locale: en_US

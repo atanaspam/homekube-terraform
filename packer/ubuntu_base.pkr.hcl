@@ -1,8 +1,21 @@
+packer {
+  required_plugins {
+    vmware = {
+      version = ">= 1.0.0"
+      source  = "github.com/hashicorp/vmware"
+    }
+    vsphere = {
+      version = ">= 0.0.1"
+      source  = "github.com/hashicorp/vsphere"
+    }
+  }
+}
+
 source "vmware-iso" "ubuntu_base" {
   cpus         = 4
   memory       = 8192
   boot_command = ["<esc><esc><esc><esc>e<wait>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "linux /casper/vmlinuz --- autoinstall ds=\"nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\"<enter><wait>", "initrd /casper/initrd<enter><wait>", "boot<enter>", "<enter><f10><wait>"]
-  boot_wait    = "5s"
+  boot_wait    = "25s"
   headless     = false
   http_content = {
     "/meta-data" = file("http/meta-data")
@@ -32,7 +45,6 @@ build {
 
   post-processors {
     post-processor "vsphere" {
-      keep_input_artifact = true
       vm_name             = "ubuntu_base"
       vm_folder           = "Templates"
       disk_mode           = "thin"
@@ -57,6 +69,7 @@ build {
       password   = var.vcenter_password
       username   = var.vcenter_username
       insecure   = true
+      reregister_vm = false
     }
   }
 }

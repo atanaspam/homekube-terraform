@@ -41,11 +41,11 @@ variable "vm_ssh_username" {
 variable "vm_ssh_password" {
   type      = string
   sensitive = true
-  description = "The password to use for SSH access to the created VM."
+  description = "The plaintext password to use for SSH access to the created VM."
 }
 
 variable "vm_ssh_password_hash" {
   type      = string
   sensitive = true
-  description = "The hash of the SSH password to be used the user-data file. Use openssl passwd -6 -stdin to generate it"
+  description = "The hash of the SSH password to be used the user-data file. Use openssl passwd -6 -stdin (Debian only) to generate it"
 }
