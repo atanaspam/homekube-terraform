@@ -8,11 +8,21 @@ Usually spinning up a kubernetes cluster within a non-enterprise "on premises" e
 
 ## How it works
 
-TODO
+TODO - diagram
 
 ## Prerequisites
 
 This is an opinionated setup because it is tailored to my homelab. As a result there are a bunch of prerequisites that need to be in place for the terraform code to work. Hopefully I will eventually manage to make the dependencies vendor agnostic in a way that allows anyone to configre their homelab and then use the code from this project, but this is not the case yet.
+
+### Local Software
+
+There is some local software required for the whole automation to run.
+Terraform:
+Terraform
+Packer:
+Packer
+VMware Workstation / Fusion
+ovftool
 
 ### Networking
 
@@ -27,17 +37,13 @@ Details on how to set up your vSphere hypervisor can be found [here](docs/vspher
 
 ### VM template creation
 
-Spinning up VMs from scratch and installing them on VMs is a very expensive process. This is why we will be creating a base template for our VMs that we will reuse accross all our nodes and configure according to our needs. This process is already common within cloud envronments for multiple reasons such as boot time and security.
+Spinning up VMs from scratch and installing an OS on them is a very expensive process. This is why we will be creating a base template for our VMs that we will reuse accross all our nodes and configure according to our needs. This process is already common within cloud envronments for multiple reasons such as boot time and security.
 
-Instructions for creating your reusable image can be found [here](docs/vm-template.md).
+More details about process for creating a reusable image can be found [here](docs/vm-template.md).
 
 ### Certificate Authority
 
 TODO
-
-### VM Image template
-
-Packer documentation goes here
 
 ## Running locally
 
@@ -47,18 +53,20 @@ Env vars required
 
 ```bash
 export VSPHERE_USER="terraform"
-export VSPHERE_PASSWORD
-export VSPHERE_SERVER
-export TF_VAR_vm_ssh_username
-export TF_VAR_vm_ssh_password
-export TF_VAR_datacenter_name
-export TF_VAR_datastore_name
-export TF_VAR_cluster_name
-export TF_VAR_network_name
-export TF_VAR_num_controllers
-export TF_VAR_num_workers
+export VSPHERE_PASSWORD=""
+export VSPHERE_SERVER=""
+export TF_VAR_vm_ssh_username="" # Must match vm_ssh_username in packer
+export TF_VAR_vm_ssh_password="" # Must match vm_ssh_password in packer
+export TF_VAR_datacenter_name=""
+export TF_VAR_datastore_name=""
+export TF_VAR_cluster_name=""
+export TF_VAR_network_name=""
+export TF_VAR_num_controllers=""
+export TF_VAR_num_workers=""
 export TF_VAR_discovery_token_ca_cert_hash=$(openssl x509 -in ca/kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256)
 ```
+
+Once the variables are configured, simply run terraform.
 
 ```bash
 terraform init
