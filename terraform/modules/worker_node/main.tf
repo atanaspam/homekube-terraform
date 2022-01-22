@@ -28,7 +28,7 @@ data "vsphere_network" "vmnetwork" {
 }
 
 data "vsphere_virtual_machine" "templatevm" {
-  name          = "ubuntu-template"
+  name          = "ubuntu_base"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 

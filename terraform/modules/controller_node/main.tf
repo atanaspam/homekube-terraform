@@ -28,7 +28,7 @@ data "vsphere_network" "vmnetwork" {
 }
 
 data "vsphere_virtual_machine" "templatevm" {
-  name          = "ubuntu-template"
+  name          = "ubuntu_base"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -96,12 +96,12 @@ resource "null_resource" "first_controller_wait" {
   # Only wait for the first controller to be ready
   count = var.node_num == 0 ? 1 : 0
 
-  triggers {
+  triggers = {
     node_num = "${var.node_num}"
   }
 
   connection {
-      host     = self.default_ip_address
+      host     = vsphere_virtual_machine.kube_controller.default_ip_address
       type     = "ssh"
       user     = var.vm_ssh_username
       password = var.vm_ssh_password
