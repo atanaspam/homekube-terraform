@@ -41,9 +41,9 @@ variable "controller_static_ip_mappings" {
   type        = map(any)
   description = "Static IP mappings for each node in the cluster. This is configurable so that you can have full control over the network setup of your nodes. The info here should match the static mappings in your DHCP server."
   default = {
-    0 = { "mac" = "00:50:56:80:f3:20"},
-    # 1 = {"mac" = "00:50:56:80:f3:21"},
-    # 2 = {"mac" = "00:50:56:80:f3:22"},
+    0 = { "mac" = "00:50:56:80:f3:20" },
+    # 1 = { "mac" = "00:50:56:80:f3:21" },
+    # 2 = { "mac" = "00:50:56:80:f3:22" },
   }
 }
 
@@ -51,8 +51,8 @@ variable "worker_static_ip_mappings" {
   type        = map(any)
   description = "Static IP mappings for each node in the cluster. This is configurable so that you can have full control over the network setup of your nodes. The info here should match the static mappings in your DHCP server."
   default = {
-    0 = { "mac" = "00:50:56:80:f3:2d"},
-    # 1 = {"mac" = "00:50:56:80:f3:2c"},
-    # 2 = {"mac" = "00:50:56:80:f3:2b"},
+    0 = { "mac" = "00:50:56:80:f3:2d" },
+    # 1 = { "mac" = "00:50:56:80:f3:2c" },
+    # 2 = { "mac" = "00:50:56:80:f3:2b" },
   }
 }
