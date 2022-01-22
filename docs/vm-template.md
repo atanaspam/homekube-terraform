@@ -16,4 +16,4 @@ When the quirks of setting up packer are set aside, the process for creating a V
 
 ## Creating the template VM
 
-More details on creating your template VM can be found [here](packer/README.md).
+More details on creating your template VM can be found [here](../packer/README.md).
