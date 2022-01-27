@@ -11,22 +11,16 @@ autoinstall:
       uri: http://ports.ubuntu.com/ubuntu-ports
   early-commands:
     - sudo systemctl stop ssh
-  # I think this is not needed anymore
-  # users:
-  # - default
-  # - name: "${username}"
-  #   lock_passwd: false
-  #   passwd: "${password}"
   identity:
-    hostname: ubuntu_base2104
+    hostname: ubuntu_base2004
     username: "${username}"
     password: "${password}"
   ssh:
     allow-pw: true
     install-server: true
-  # TODO automatically install a public key
-  # ssh_authorized_keys:
-  #    - $ {pub_key}
+    # TODO automatically install a public key
+    # ssh_authorized_keys:
+    #    - $ {pub_key}
   packages:
     - openssh-server
     - open-vm-tools
@@ -39,9 +33,6 @@ autoinstall:
   keyboard:
     layout: en
   late-commands:
-    - 'sed -i "s/dhcp4: true/&\n      dhcp-identifier: mac/" /target/etc/netplan/00-installer-config.yaml'
+    - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
     - echo '${username} ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/${username}
-  # late-commands:
-  #   - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
-  #   - echo '${username} ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/${username}
-  #   - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/${username}
+    - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/${username}

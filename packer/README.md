@@ -25,3 +25,11 @@ You can also refer to the `variables.pkr.hcl` file for a detailed description of
 packer init .
 packer build -on-error=ask -var-file="variables.pkrvars.hcl" .
 ```
+
+## Custom bootstrap scripts
+
+The ability to run custom scripts after the cluster is created is provided via the `bootstrap.sh` script. This scirpt can be custom for anyone using this repository.
+
+## References
+
+https://github.com/vmware-samples/packer-examples-for-vsphere/tree/main/builds/linux/ubuntu/20-04-lts

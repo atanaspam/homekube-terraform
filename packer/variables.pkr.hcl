@@ -47,5 +47,5 @@ variable "vm_ssh_password" {
 variable "vm_ssh_password_hash" {
   type      = string
   sensitive = true
-  description = "The hash of the SSH password to be used the user-data file. Use openssl passwd -6 -stdin (Debian only) to generate it"
+  description = "The hash of the SSH password to be used the user-data file. Use openssl passwd -6 -stdin (Debian) to generate it."
 }

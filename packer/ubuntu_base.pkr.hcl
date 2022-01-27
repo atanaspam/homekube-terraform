@@ -14,22 +14,23 @@ packer {
 source "vmware-iso" "ubuntu_base" {
   cpus         = 4
   memory       = 8192
-  boot_command = ["<esc><esc><esc><esc>e<wait>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "linux /casper/vmlinuz --- autoinstall ds=\"nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\"<enter><wait>", "initrd /casper/initrd<enter><wait>", "boot<enter>", "<enter><f10><wait>"]
-  boot_wait    = "25s"
+  # boot_command = ["<esc><esc><esc><esc>e<wait>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "linux /casper/vmlinuz --- autoinstall ds=\"nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\"<enter><wait>", "initrd /casper/initrd<enter><wait>", "boot<enter>", "<enter><f10><wait>"]
+  boot_command = ["<esc><esc><esc>", "<enter><wait>", "/casper/vmlinuz ", "root=/dev/sr0 ", "initrd=/casper/initrd ", "autoinstall ", "ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/", "<enter>" ]
+  boot_wait    = "15s"
   headless     = false
   http_content = {
     "/meta-data" = file("http/meta-data")
     "/user-data" = templatefile("http/user-data", { username = var.vm_ssh_username, password = var.vm_ssh_password_hash })
   }
   insecure_connection    = "true"
-  iso_checksum           = "sha256:e4089c47104375b59951bad6c7b3ee5d9f6d80bfac4597e43a716bb8f5c1f3b0"
-  iso_urls               = ["iso/ubuntu-21.04-live-server-amd64.iso", "https://releases.ubuntu.com/21.04/ubuntu-21.04-live-server-amd64.iso"]
+  iso_checksum           = "sha256:f8e3086f3cea0fb3fefb29937ab5ed9d19e767079633960ccb50e76153effc98"
+  iso_urls               = ["iso/ubuntu-20.04.3-live-server-amd64.iso", "https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso"]
   shutdown_command       = "sudo shutdown -P now"
   ssh_handshake_attempts = "100"
   ssh_username           = var.vm_ssh_username
   ssh_password           = var.vm_ssh_password
   ssh_port               = 22
-  ssh_timeout            = "400m"
+  ssh_timeout            = "30m"
   guest_os_type          = "ubuntu64Guest"
   # disk_size             = 16384
   disk_type_id = 0
@@ -40,7 +41,16 @@ build {
 
   # Clean up the existing cloud init folder. This will allow us to use it again when the template is used
   provisioner "shell" {
-    inline = ["sudo rm -rf /var/lib/cloud/"]
+    inline = ["sudo cloud-init clean --logs"]
+  }
+
+  provisioner "shell" {
+    inline = ["echo 'datasource_list: [VMware]' | sudo tee -a /etc/cloud/cloud.cfg.d/99-installer.cfg"]
+  }
+
+  provisioner "file" {
+    source = "scripts/bootstrap.sh"
+    destination = "/home/${var.vm_ssh_username}/bootstrap.sh"
   }
 
   post-processors {
