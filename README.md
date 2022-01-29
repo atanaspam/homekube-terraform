@@ -67,10 +67,10 @@ Env vars required
 ```bash
 export VSPHERE_USER="terraform"
 export VSPHERE_PASSWORD=""
-export VSPHERE_SERVER=""
+export VSPHERE_SERVER="" # Must match vcenter_server in packer
 export TF_VAR_vm_ssh_username="" # Must match vm_ssh_username in packer
 export TF_VAR_vm_ssh_password="" # Must match vm_ssh_password in packer
-export TF_VAR_datacenter_name=""
+export TF_VAR_datacenter_name="" # Must match datacenter_name in packer
 export TF_VAR_datastore_name=""
 export TF_VAR_cluster_name=""
 export TF_VAR_network_name=""
@@ -78,9 +78,10 @@ export TF_VAR_target_subnet=""
 export TF_VAR_discovery_token_ca_cert_hash=$(openssl x509 -in ca/kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256)
 ```
 
-Once the variables are configured, simply run terraform.
+Once the variables are configured, simply run Terraform.
 
 ```bash
+cd terraform
 terraform init
 terraform apply
 ```
