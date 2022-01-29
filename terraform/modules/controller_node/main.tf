@@ -1,10 +1,10 @@
 locals {
-  kubernetes_ca                 = fileexists("${path.root}/ca/kubernetes-ca/kubernetes-ca.pem") ? file("${path.root}/ca/kubernetes-ca/kubernetes-ca.pem") : ""
-  kubernetes_ca_key             = fileexists("${path.root}/ca/kubernetes-ca/kubernetes-ca-key.pem") ? file("${path.root}/ca/kubernetes-ca/kubernetes-ca-key.pem") : ""
-  kubernetes_front_proxy_ca     = fileexists("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem") ? file("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem") : ""
-  kubernetes_front_proxy_ca_key = fileexists("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") ? file("${path.root}/ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") : ""
-  etcd_ca                       = fileexists("${path.root}/ca/etcd-ca/etcd-ca.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca.pem") : ""
-  etcd_ca_key                   = fileexists("${path.root}/ca/etcd-ca/etcd-ca-key.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca-key.pem") : ""
+  kubernetes_ca                 = fileexists("${path.root}/../ca/kubernetes-ca/kubernetes-ca.pem") ? file("${path.root}/../ca/kubernetes-ca/kubernetes-ca.pem") : ""
+  kubernetes_ca_key             = fileexists("${path.root}/../ca/kubernetes-ca/kubernetes-ca-key.pem") ? file("${path.root}/../ca/kubernetes-ca/kubernetes-ca-key.pem") : ""
+  kubernetes_front_proxy_ca     = fileexists("${path.root}/../ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem") ? file("${path.root}/../ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem") : ""
+  kubernetes_front_proxy_ca_key = fileexists("${path.root}/../ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") ? file("${path.root}/../ca/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem") : ""
+  etcd_ca                       = fileexists("${path.root}/../ca/etcd-ca/etcd-ca.pem") ? file("${path.root}/../ca/etcd-ca/etcd-ca.pem") : ""
+  etcd_ca_key                   = fileexists("${path.root}/../ca/etcd-ca/etcd-ca-key.pem") ? file("${path.root}/../ca/etcd-ca/etcd-ca-key.pem") : ""
   hostname                      = "kube-controller-${var.node_num}"
 }
 
@@ -43,6 +43,8 @@ data "template_file" "kube_controller_metadata" {
 data "template_file" "kube_controller_userdata" {
   template = file("${path.root}/../cloudinit/userdata-controller.yaml")
   vars = {
+    hostname                      = local.hostname
+    username                      = var.vm_ssh_username
     token                         = var.kubeadm_join_token
     byoca                         = var.bring_your_own_ca
     kubernetes_ca                 = indent(6, local.kubernetes_ca)
@@ -109,7 +111,7 @@ resource "null_resource" "first_controller_wait" {
 
   provisioner "remote-exec" {
     inline = [
-      "cloud-init status --wait",
+      "sudo cloud-init status --wait",
     ]
   }
 }

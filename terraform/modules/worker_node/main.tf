@@ -43,6 +43,7 @@ data "template_file" "node_metadata" {
 data "template_file" "kube_worker_userdata" {
   template = file("${path.root}/../cloudinit/userdata-worker.yaml")
   vars = {
+    hostname                      = local.hostname
     token                         = var.kubeadm_join_token
     byoca                         = var.bring_your_own_ca
     kubernetes_ca                 = indent(6, local.kubernetes_ca)
@@ -75,7 +76,9 @@ resource "vsphere_virtual_machine" "kube_worker" {
 
   disk {
     label = "disk0"
-    size  = 16 #data.vsphere_virtual_machine.templatevm.disks.0.size
+    # TODO don't know why the line below does not work..
+    # size  = data.vsphere_virtual_machine.templatevm.disks.0.size
+    size  = 40
     # eagerly_scrub    = data.vsphere_virtual_machine.templatevm.disks.0.eagerly_scrub
     # thin_provisioned = data.vsphere_virtual_machine.templatevm.disks.0.thin_provisioned
   }
