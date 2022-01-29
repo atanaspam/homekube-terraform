@@ -32,3 +32,6 @@ ca/**
 # Packer
 variables.pkrvars.hcl
 packer/output**
+
+# Custom bootstrap script
+packer/scripts/bootstrap.sh

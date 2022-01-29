@@ -14,7 +14,6 @@ packer {
 source "vmware-iso" "ubuntu_base" {
   cpus         = 4
   memory       = 8192
-  # boot_command = ["<esc><esc><esc><esc>e<wait>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "<del><del><del><del><del><del><del><del>", "linux /casper/vmlinuz --- autoinstall ds=\"nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\"<enter><wait>", "initrd /casper/initrd<enter><wait>", "boot<enter>", "<enter><f10><wait>"]
   boot_command = ["<esc><esc><esc>", "<enter><wait>", "/casper/vmlinuz ", "root=/dev/sr0 ", "initrd=/casper/initrd ", "autoinstall ", "ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/", "<enter>" ]
   boot_wait    = "15s"
   headless     = false
@@ -32,7 +31,7 @@ source "vmware-iso" "ubuntu_base" {
   ssh_port               = 22
   ssh_timeout            = "30m"
   guest_os_type          = "ubuntu64Guest"
-  # disk_size             = 16384
+  disk_size              = 16384
   disk_type_id = 0
 }
 
