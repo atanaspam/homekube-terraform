@@ -216,14 +216,14 @@ write_files:
           - name: default
             protocol: layer2
             addresses:
-            - 10.1.4.200-10.1.4.210
+            - ${subnet_base}.200-${subnet_base}.210
 runcmd:
   - sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
   - sudo swapoff -a
   - sudo ufw disable
   - cat /tmp/docker.conf | sudo tee -a /etc/docker/daemon.json
   - sudo systemctl restart docker
-  - sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --control-plane-endpoint 10.1.4.0
+  - sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --control-plane-endpoint ${subnet_base}.0
   - sudo kubeadm token create ${token}
   - mkdir -p /home/${username}/.kube
   - sudo cp -i /etc/kubernetes/admin.conf /home/${username}/.kube/config

@@ -3,15 +3,16 @@
 ## TL/DR
 
 1. Set your domain name to a domain you own or any `.localdomain`
-2. If you use a `10.0.0.0/8` local network, for a 3 controller and 3 worker node cluster create the folloing static mappings:
-|     MAC Address     |      IP      |
-| ------------------- | ------------ |
-| `00:50:56:80:f3:20` |  `10.1.4.0`  |
-| `00:50:56:80:f3:21` |  `10.1.4.1`  |
-| `00:50:56:80:f3:22` |  `10.1.4.2`  |
-| `00:50:56:80:f3:30` | `10.1.4.100` |
-| `00:50:56:80:f3:31` | `10.1.4.101` |
-| `00:50:56:80:f3:32` | `10.1.4.102` |
+2. If you specified a `10.1.4.0` for the `target_subnet` variable, for a 3 controller and 3 worker node cluster create the folloing static mappings:
+
+ Node Type   | MAC Address         | IP           |
+| ---------- | ------------------- | ------------ |
+| controller | `00:50:56:80:f3:20` |  `10.1.4.0`  |
+| controller | `00:50:56:80:f3:21` |  `10.1.4.1`  |
+| controller | `00:50:56:80:f3:22` |  `10.1.4.2`  |
+| worker     | `00:50:56:80:f3:30` | `10.1.4.100` |
+| worker     | `00:50:56:80:f3:31` | `10.1.4.101` |
+| worker     | `00:50:56:80:f3:32` | `10.1.4.102` |
 
 ## Long story (Prerequisites)
 
@@ -41,9 +42,7 @@ Create Virtual IP (Loadbalancer) for your control-plane-endpoint
 
 Static Mapping MAC addresses
 
-If you are simply reusing this code check the MAC addresses specified [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L44) and [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L54), and make sure those have the appropriate static mappings.
-
-This automation uses the `00:50:56:XX:XX:XX` space since it belongs to VMWare.
+If you are simply reusing this code, make sure that the MAC addresses specified [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L44) and [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L54) are mapped to IPs `0` to `100` for controllers and `100` to `255` for workers.
 
 As defined in the variables.tf file, Controller nodes get MAC addresses in the `00:50:56:80:f3:20` - `00:50:56:80:f3:2E`, each increased by one. For example the first controller gets `00:50:56:80:f3:20`, second one `00:50:56:80:f3:21` third one  `00:50:56:80:f3:22` etc.
 
@@ -51,11 +50,13 @@ Worker nodes get `00:50:56:80:f3:30` - `00:50:56:80:f3:3E` in a simmilar fashion
 
 As a result you need to create static mappings the following way:
 
-* For a 3 controller and 3 worker node cluster:
-    `00:50:56:80:f3:20` -> `10.1.4.0`,
-    `00:50:56:80:f3:21` -> `10.1.4.1`,
-    `00:50:56:80:f3:22` -> `10.1.4.2`.
-
-    `00:50:56:80:f3:30` -> `10.1.4.100`,
-    `00:50:56:80:f3:31` -> `10.1.4.101`,
-    `00:50:56:80:f3:32` -> `10.1.4.102`.
+* For each MAC in the controller nodes:
+    | MAC Address          | IP                    |
+    | -------------------- | --------------------- |
+    | `<controller MAC 0>` | `<target_subnet>.0`   |
+    | `<controller MAC 1>` | `<target_subnet>.1`   |
+    | `<controller MAC 2>` | `<target_subnet>.2`   |
+    | `<worker MAC 0>`     | `<target_subnet>.100` |
+    | `<worker MAC 1>`     | `<target_subnet>.101` |
+    | `<worker MAC 2>`     | `<target_subnet>.102` |
+    | ...                  | ...                   |

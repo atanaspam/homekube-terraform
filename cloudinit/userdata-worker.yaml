@@ -202,6 +202,6 @@ runcmd:
   - sudo ufw disable
   - cat /tmp/docker.conf | sudo tee -a /etc/docker/daemon.json
   - sudo systemctl restart docker
-  - sudo kubeadm join 10.1.4.0:6443 --token ${token} %{ if byoca == "true" }--discovery-token-unsafe-skip-ca-verification%{ else }--discovery-token-ca-cert-hash sha256:${discovery_token_ca_cert_hash}%{ endif }
+  - sudo kubeadm join ${subnet_base}.0:6443 --token ${token} %{ if byoca == "true" }--discovery-token-unsafe-skip-ca-verification%{ else }--discovery-token-ca-cert-hash sha256:${discovery_token_ca_cert_hash}%{ endif }
 
 

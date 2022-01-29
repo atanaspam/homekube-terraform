@@ -31,7 +31,8 @@ Packer:
 
 ### Networking
 
-I am using PfSense as my router and firerwall. Therefore the networking prerequisites are documented for PfSense specifically. Aditionally this automation assumes a certain IP range (`10.1.4.0/24`) is available and routable. You might need to adjust that depending on your network.
+I am using PfSense as my router and firerwall. Therefore the networking prerequisites are documented for PfSense specifically. Aditionally this automation assumes a `/24` subnet of your choice is available and routable.
+
 See: [Network config](docs/pfsense.md)
 
 ### Hypervisor
@@ -73,8 +74,7 @@ export TF_VAR_datacenter_name=""
 export TF_VAR_datastore_name=""
 export TF_VAR_cluster_name=""
 export TF_VAR_network_name=""
-export TF_VAR_num_controllers=""
-export TF_VAR_num_workers=""
+export TF_VAR_target_subnet=""
 export TF_VAR_discovery_token_ca_cert_hash=$(openssl x509 -in ca/kubernetes-ca/kubernetes-ca.pem -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256)
 ```
 
