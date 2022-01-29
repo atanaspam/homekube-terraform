@@ -16,17 +16,22 @@ This is an opinionated setup because it is tailored to my homelab. As a result t
 
 ### Local Software
 
-There is some local software required for the whole automation to run.
+There is some software required locally for the whole automation to run.
+
 Terraform:
-Terraform
+
+* Terraform
+
 Packer:
-Packer
-VMware Workstation / Fusion
-ovftool
+
+* Packer
+* VMware Workstation / Fusion
+* ovftool
+* Debian system (used to generate the hash of the password for the template VM)
 
 ### Networking
 
-I am using PfSense as my router and firerwall. Therefore the networking prerequisites are documented for PfSense specifically.
+I am using PfSense as my router and firerwall. Therefore the networking prerequisites are documented for PfSense specifically. Aditionally this automation assumes a certain IP range (`10.1.4.0/24`) is available and routable. You might need to adjust that depending on your network.
 See: [Network config](docs/pfsense.md)
 
 ### Hypervisor
@@ -43,7 +48,14 @@ More details about process for creating a reusable image can be found [here](doc
 
 ### Certificate Authority
 
-TODO
+In order for this automation to work properly you need to have your own CA. This allows the automation to predict the default `kubeadm join` token and use that to join all the nodes in the cluster.
+
+More details on how to set up your own CA can be found [here](docs/ca.md).
+
+## Configuration
+
+Here is an overview of what can be configured.
+
 
 ## Running locally
 
