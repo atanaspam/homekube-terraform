@@ -51,3 +51,13 @@ variable "kubeadm_join_token" {
   type        = string
   description = "The token used in the node join process"
 }
+
+variable "target_subnet" {
+  type        = string
+  description = "The target subnet where the kubernetes cluster will be deployed. This needs to be a routable /24 subnet that is not used by anything else."
+
+  validation {
+    condition     = can(regex("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(0)$", var.target_subnet))
+    error_message = "The subnet def should end with a 0, and should not include the mask definition. For example 10.1.4.0 ."
+  }
+}

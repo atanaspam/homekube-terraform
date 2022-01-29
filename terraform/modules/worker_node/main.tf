@@ -6,6 +6,7 @@ locals {
   etcd_ca                       = fileexists("${path.root}/ca/etcd-ca/etcd-ca.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca.pem") : ""
   etcd_ca_key                   = fileexists("${path.root}/ca/etcd-ca/etcd-ca-key.pem") ? file("${path.root}/ca/etcd-ca/etcd-ca-key.pem") : ""
   hostname                      = "kube-worker-${var.node_num}"
+  subnet_base                   = trimsuffix(var.target_subnet, ".0")
 }
 
 data "vsphere_datacenter" "dc" {
@@ -44,6 +45,7 @@ data "template_file" "kube_worker_userdata" {
   template = file("${path.root}/../cloudinit/userdata-worker.yaml")
   vars = {
     hostname                      = local.hostname
+    subnet_base                   = local.subnet_base
     token                         = var.kubeadm_join_token
     byoca                         = var.bring_your_own_ca
     kubernetes_ca                 = indent(6, local.kubernetes_ca)

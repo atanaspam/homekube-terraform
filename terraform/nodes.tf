@@ -4,6 +4,7 @@ module "controller_nodes" {
 
   node_num                     = each.key
   mac_address                  = each.value.mac
+  target_subnet                = var.target_subnet
   datacenter_name              = var.datacenter_name
   datastore_name               = var.datastore_name
   cluster_name                 = var.cluster_name
@@ -21,6 +22,7 @@ module "worker_nodes" {
 
   node_num                     = each.key
   mac_address                  = each.value.mac
+  target_subnet                = var.target_subnet
   datacenter_name              = var.datacenter_name
   datastore_name               = var.datastore_name
   cluster_name                 = var.cluster_name
