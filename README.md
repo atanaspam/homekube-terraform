@@ -4,11 +4,15 @@ An opinionated infrastructure as code homelab kubernetes cluster on vSphere.
 
 ## Background
 
-Usually spinning up a kubernetes cluster within a non-enterprise "on premises" environment such as homelab involves a fair bit of manual work. This project aims to automate as many steps as possible in this process so that one spends less time on the infrastructure and more time on kubernetes itself. In adition to that this is also a great opportunity to learn how to bridge the gap between homelabs and current offerings within the cloud.
+Usually spinning up a kubernetes cluster within a non-enterprise "on premises" environment such as homelab involves a fair bit of manual work. This project aims to automate as many steps as possible in this process so that one spends less time on the infrastructure and more time on kubernetes itself. In addition to that this is also a great opportunity to learn how to bridge the gap between homelabs and current offerings within the cloud.
 
-## How it works
+## What you get
 
-TODO - diagram
+Homekube-terraform allows you to provision a Kubernetes cluster with a configurable number of Control-plane and worker nodes using terraform based on a "base image" created by Packer. Each node is a VM created in the target vSphere cluster and configured via Terraform and an optional bootstrap script.
+
+<p align="center" style="text-align:center;">
+    <img alt="Packer overview" src="docs/homekube_diagram.drawio.png" />
+</p>
 
 ## Prerequisites
 
@@ -49,7 +53,7 @@ More details about process for creating a reusable image can be found [here](doc
 
 ### Certificate Authority
 
-In order for this automation to work properly you need to have your own CA. This allows the automation to predict the default `kubeadm join` token and use that to join all the nodes in the cluster.
+Having a pre-created Certificate Authortiy allows us to create users for our clusters without having to log in to it first. This makes it easier to automate any further actions executed by the potential users of our cluster.
 
 More details on how to set up your own CA can be found [here](docs/ca.md).
 
@@ -57,6 +61,15 @@ More details on how to set up your own CA can be found [here](docs/ca.md).
 
 Here is an overview of what can be configured.
 
+### Bootstrap script
+
+A bootstrap script is placed on the base image used by all nodes during the Packer image creation process. This scirpt can be populated according to individual needs.
+
+Example script can be found [here](packer/scripts/bootstrap-example.sh).
+
+### Terraform
+
+Terraform exposes a few configuration options. Those are detailed in the variables file.
 
 ## Running locally
 
