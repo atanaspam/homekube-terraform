@@ -3,7 +3,7 @@
 ## TL/DR
 
 1. Set your domain name to a domain you own or any `.localdomain`
-2. If you specified a `10.1.4.0` for the `target_subnet` variable, for a 3 controller and 3 worker node cluster create the folloing static mappings:
+2. If you specified a `10.1.4.0` for the `target_subnet` terraform variable, and assuming a 3 Control-plane and 3 worker node cluster create the folloing static mappings:
 
  Node Type   | MAC Address         | IP           |
 | ---------- | ------------------- | ------------ |
@@ -20,7 +20,7 @@
 
    It is advised to have a publicly resolvable domain name. Alternatively you can use one of the reserved DNS names as per [RFC2606-2](https://www.ietf.org/archive/id/draft-chapin-rfc2606bis-00.html#legacy) and [RFC2606-2](https://www.ietf.org/archive/id/draft-chapin-rfc2606bis-00.html#new) like `yourdomainofchoice.localdomain`
 
-2. Another?
+2. `/24` subnet that is routable and not used by anything else.
 
 ## Configurations
 
@@ -42,15 +42,15 @@ Create Virtual IP (Loadbalancer) for your control-plane-endpoint
 
 Static Mapping MAC addresses
 
-If you are simply reusing this code, make sure that the MAC addresses specified [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L44) and [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L54) are mapped to IPs `0` to `100` for controllers and `100` to `255` for workers.
+If you are simply reusing this code, make sure that the MAC addresses specified [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L44) and [here](https://github.com/atanaspam/homekube-terraform/blob/257d8ff7d6c535ce2e500c3f2ea73ae23031dd15/terraform/variables.tf#L54) are mapped to IPs `0` to `100` for Control-plane nodes and `100` to `255` for workers.
 
-As defined in the variables.tf file, Controller nodes get MAC addresses in the `00:50:56:80:f3:20` - `00:50:56:80:f3:2E`, each increased by one. For example the first controller gets `00:50:56:80:f3:20`, second one `00:50:56:80:f3:21` third one  `00:50:56:80:f3:22` etc.
+As defined in the variables.tf file, Control-plane nodes get MAC addresses in the `00:50:56:80:f3:20` - `00:50:56:80:f3:2E`, each increased by one. For example the first Control-plane node gets `00:50:56:80:f3:20`, second one `00:50:56:80:f3:21` third one  `00:50:56:80:f3:22` etc.
 
 Worker nodes get `00:50:56:80:f3:30` - `00:50:56:80:f3:3E` in a simmilar fashion.
 
 As a result you need to create static mappings the following way:
 
-* For each MAC in the controller nodes:
+* For each MAC in the Control-plane nodes:
     | MAC Address          | IP                    |
     | -------------------- | --------------------- |
     | `<controller MAC 0>` | `<target_subnet>.0`   |
